@@ -163,7 +163,7 @@ export default function IntegrationsPage() {
           </Link>
         </div>
         <ImageAnchor
-          src="/assets/integration-control-surface.png"
+          src="/assets/hero-command-center.png"
           alt="Avero integrations overview visual"
           className="story-image story-image-wide"
           fallbackLabel="Integrations Placeholder"

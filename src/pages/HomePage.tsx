@@ -217,7 +217,7 @@ export default function HomePage() {
           </Link>
         </div>
         <ImageAnchor
-          src="/assets/hero-command-center.png"
+          src="/assets/integration-control-surface.png"
           alt="Avero dashboard product mockup"
           className="story-image story-image-hero"
           fallbackLabel="Hero Product Placeholder"
