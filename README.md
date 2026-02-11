@@ -1,90 +1,106 @@
 # Avero Landing Page
 
-## Ava Chat API (Optional)
+Marketing website and landing page for Avero Cloud.
 
-The Ava widget now supports API-backed answers.
+**Live URL:** https://averocloud.com
 
-1. Create a local env file:
+## Features
+
+- **Home** - Hero section, features overview, integrations, pricing
+- **Features** - Detailed feature pages
+- **Integrations** - Third-party integration showcase
+- **About** - Company information
+- **Login** - SSO authentication to app.averocloud.com
+- **Signup** - User registration flow
+- **Ava Chat** - AI assistant widget
+
+## Tech Stack
+
+- **Frontend:** React 19 + TypeScript + Vite
+- **Styling:** Custom CSS with dark theme
+- **UI Components:** Konsta UI
+- **Routing:** React Router
+- **Analytics:** Custom tracking module
+
+## Development
+
 ```bash
-cp .env.example .env.local
+# Install dependencies
+npm install
+
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
-2. Set your endpoint:
-```bash
+
+## Environment Variables
+
+Create `.env.local` for local development:
+
+```env
+# Optional: Ava Chat API endpoint
 VITE_AVA_CHAT_ENDPOINT=https://your-api.example.com/chat
 ```
 
-If no endpoint is set, Ava automatically falls back to local in-app responses.
+## Deployment
 
-## React + TypeScript + Vite
+Deployed to AWS S3 + CloudFront:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
+aws s3 sync dist/ s3://avero-frontend-prod --delete
+aws cloudfront create-invalidation --distribution-id E1KTEOSG23NGJE --paths "/*"
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## SSO Login Integration
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The login page authenticates users and redirects to the platform:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. User enters credentials at `/login`
+2. Calls `POST https://api.averocloud.com/api/v1/auth/login`
+3. On success: redirects to `https://app.averocloud.com?sso_token=xxx&sso_refresh=xxx`
+4. On failure: displays error message, no redirect
+
+```typescript
+// Login flow (src/pages/LoginPage.tsx)
+const response = await fetch(`${API_BASE_URL}/auth/login`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email, password }),
+});
+
+if (response.ok) {
+  const data = await response.json();
+  window.location.href = `https://app.averocloud.com?sso_token=${data.access_token}&sso_refresh=${data.refresh_token}`;
+}
 ```
+
+## Project Structure
+
+```
+src/
+├── components/      # Reusable components
+│   ├── Ava.tsx      # AI chat widget
+│   ├── Footer.tsx   # Site footer
+│   ├── Header.tsx   # Navigation header
+│   └── SectionHeading.tsx
+├── lib/
+│   └── analytics.ts # Event tracking
+├── pages/           # Route pages
+│   ├── HomePage.tsx
+│   ├── LoginPage.tsx
+│   ├── SignupPage.tsx
+│   └── ...
+└── index.css        # Global styles
+```
+
+## Related Repositories
+
+- [avero-platform](https://github.com/yah600/avero-platform) - Main application
+- [avero-backend](https://github.com/yah600/avero-backend) - API services
+- avero-infra - Infrastructure (Terraform)
