@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { App as KonstaApp, Button } from 'konsta/react'
-import { BrowserRouter, Link, NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { BrowserRouter, Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import FeaturesPage from './pages/FeaturesPage'
 import IntegrationsPage from './pages/IntegrationsPage'
 import AboutPage from './pages/AboutPage'
+import ContactPage from './pages/ContactPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -192,6 +193,8 @@ function SiteFooter() {
           <Link to="/features">Features</Link>
           <Link to="/integrations">Integrations</Link>
           <Link to="/about">About</Link>
+          <Link to="/contact">Contact</Link>
+          <a href="mailto:info@averocloud.com">info@averocloud.com</a>
           <a href="https://synergair.ai/" target="_blank" rel="noreferrer">
             Synergair
           </a>
@@ -233,7 +236,7 @@ export default function App() {
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/cookies" element={<CookiesPage />} />
-            <Route path="/contact" element={<Navigate to="/signup" replace />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/dashboard" element={<NotFoundPage />} />

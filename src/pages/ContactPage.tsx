@@ -19,6 +19,10 @@ export default function ContactPage() {
       />
 
       <Card className="contact-card">
+        <p className="contact-direct-line">
+          Prefer direct contact? Email us at{' '}
+          <a href="mailto:info@averocloud.com">info@averocloud.com</a>.
+        </p>
         {submitted ? (
           <div className="submitted-state">
             <h3>Access request received.</h3>

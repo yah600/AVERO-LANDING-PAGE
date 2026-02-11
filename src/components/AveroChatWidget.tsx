@@ -3,6 +3,7 @@ import type { FormEvent } from 'react'
 import { Send, X } from 'lucide-react'
 import LiquidIconLogo from './branding/LiquidIconLogo'
 import { trackEvent } from '../lib/analytics'
+import { isChatApiConfigured, requestChatReply } from '../lib/chatApi'
 
 type ChatRole = 'assistant' | 'user'
 
@@ -18,6 +19,9 @@ const quickPrompts = [
   'How does Avero reduce compliance risk?',
   'How do I get access?',
 ]
+
+const MIN_REPLY_DELAY_MS = 220
+const chatApiConfigured = isChatApiConfigured()
 
 function buildReply(input: string) {
   const query = input.toLowerCase()
@@ -95,7 +99,7 @@ export default function AveroChatWidget() {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages)
   const nextIdRef = useRef(2)
   const messagesRef = useRef<HTMLDivElement | null>(null)
-  const replyTimerRef = useRef<number | null>(null)
+  const requestRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
     if (!open) return
@@ -111,13 +115,11 @@ export default function AveroChatWidget() {
 
   useEffect(() => {
     return () => {
-      if (replyTimerRef.current !== null) {
-        window.clearTimeout(replyTimerRef.current)
-      }
+      requestRef.current?.abort()
     }
   }, [])
 
-  const submitQuestion = (question: string) => {
+  const submitQuestion = async (question: string) => {
     const trimmed = question.trim()
     if (!trimmed || isTyping) return
 
@@ -128,6 +130,11 @@ export default function AveroChatWidget() {
     }
     nextIdRef.current += 1
 
+    const historyWithQuestion = [...messages, userMessage]
+    const fallbackReply = buildReply(trimmed)
+    const abortController = new AbortController()
+    requestRef.current = abortController
+
     setMessages((prev) => [...prev, userMessage])
     setInput('')
     setIsTyping(true)
@@ -135,24 +142,68 @@ export default function AveroChatWidget() {
     trackEvent('chat_widget_question', {
       source: 'floating_chat',
       question_length: trimmed.length,
+      chat_api_enabled: chatApiConfigured,
     })
 
-    replyTimerRef.current = window.setTimeout(() => {
+    try {
+      const [apiReply] = await Promise.all([
+        requestChatReply({
+          question: trimmed,
+          history: historyWithQuestion.map((entry) => ({ role: entry.role, text: entry.text })),
+          signal: abortController.signal,
+        }),
+        new Promise<void>((resolve) => {
+          window.setTimeout(resolve, MIN_REPLY_DELAY_MS)
+        }),
+      ])
+
+      if (abortController.signal.aborted) return
+
+      const reply = apiReply ?? fallbackReply
       const assistantMessage: ChatMessage = {
         id: nextIdRef.current,
         role: 'assistant',
-        text: buildReply(trimmed),
+        text: reply,
+      }
+      nextIdRef.current += 1
+
+      setMessages((prev) => [...prev, assistantMessage])
+      trackEvent('chat_widget_reply', {
+        source: 'floating_chat',
+        reply_source: apiReply ? 'api' : 'fallback',
+      })
+    } catch (error) {
+      if (abortController.signal.aborted) return
+
+      const assistantMessage: ChatMessage = {
+        id: nextIdRef.current,
+        role: 'assistant',
+        text: fallbackReply,
       }
       nextIdRef.current += 1
       setMessages((prev) => [...prev, assistantMessage])
-      setIsTyping(false)
-      trackEvent('chat_widget_reply', { source: 'floating_chat' })
-    }, 220)
+
+      trackEvent('chat_widget_reply', {
+        source: 'floating_chat',
+        reply_source: 'fallback_error',
+      })
+      trackEvent('chat_widget_error', {
+        source: 'floating_chat',
+        error: error instanceof Error ? error.message : 'unknown_error',
+      })
+    } finally {
+      if (requestRef.current === abortController) {
+        requestRef.current = null
+      }
+      if (!abortController.signal.aborted) {
+        setIsTyping(false)
+      }
+    }
   }
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    submitQuestion(input)
+    void submitQuestion(input)
   }
 
   return (
@@ -198,7 +249,7 @@ export default function AveroChatWidget() {
                   key={prompt}
                   type="button"
                   className="chat-prompt"
-                  onClick={() => submitQuestion(prompt)}
+                  onClick={() => void submitQuestion(prompt)}
                 >
                   {prompt}
                 </button>

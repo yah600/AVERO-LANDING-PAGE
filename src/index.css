@@ -1122,6 +1122,20 @@ p {
   padding: 1.25rem;
 }
 
+.contact-direct-line {
+  margin: 0 0 1rem;
+  color: var(--ink-600);
+}
+
+.contact-direct-line a {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.contact-direct-line a:hover {
+  color: #c9d8ff;
+}
+
 .demo-form {
   display: grid;
   gap: 0.95rem;
@@ -1489,6 +1503,7 @@ p {
 }
 
 .auth-form input,
+.auth-form textarea,
 .signup-step input,
 .signup-step textarea,
 .signup-step select {
@@ -1502,11 +1517,17 @@ p {
 }
 
 .auth-form input:focus,
+.auth-form textarea:focus,
 .signup-step input:focus,
 .signup-step textarea:focus,
 .signup-step select:focus {
   outline: 2px solid rgba(255, 255, 255, 0.25);
   border-color: #535353;
+}
+
+.auth-form textarea {
+  resize: vertical;
+  min-height: 110px;
 }
 
 .auth-footnote {
@@ -1903,6 +1924,10 @@ p {
 
 .story-image-flow {
   width: min(100%, 920px);
+}
+
+.story-image-flow.image-anchor {
+  margin-inline: auto;
 }
 
 .story-image-wide {

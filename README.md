@@ -1,4 +1,21 @@
-# React + TypeScript + Vite
+# Avero Landing Page
+
+## Ava Chat API (Optional)
+
+The Ava widget now supports API-backed answers.
+
+1. Create a local env file:
+```bash
+cp .env.example .env.local
+```
+2. Set your endpoint:
+```bash
+VITE_AVA_CHAT_ENDPOINT=https://your-api.example.com/chat
+```
+
+If no endpoint is set, Ava automatically falls back to local in-app responses.
+
+## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
