@@ -2920,3 +2920,122 @@ p {
     animation: none;
   }
 }
+
+/* ── VideoPlayer ── */
+
+.video-player {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow-soft);
+}
+
+.video-player video {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  max-height: min(62vh, 560px);
+}
+
+.video-player-hero {
+  width: min(100%, 980px);
+  margin-inline: auto;
+}
+
+.video-player-grid {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.video-player-grid video {
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-player-fallback {
+  min-height: clamp(120px, 15vw, 180px);
+  display: grid;
+  place-items: center;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  box-shadow: var(--shadow-soft);
+}
+
+.video-player-fallback span {
+  color: #707070;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+/* ── Services Tab Switcher ── */
+
+.services-tab-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-block: 0.5rem 2.5rem;
+}
+
+.services-tab {
+  padding: 0.65rem 1.6rem;
+  font-family: var(--font-body, 'Manrope', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--ink-500);
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.services-tab:hover {
+  color: var(--ink-700);
+  border-color: var(--ink-500);
+}
+
+.services-tab.active {
+  background: var(--accent);
+  color: var(--canvas);
+  border-color: var(--accent);
+}
+
+.services-tab-content {
+  animation: tab-fade-in 220ms ease;
+}
+
+@keyframes tab-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.video-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-block-start: 2rem;
+}
+
+@media (max-width: 860px) {
+  .video-player-hero {
+    border-radius: var(--radius-md);
+  }
+
+  .video-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .services-tab {
+    padding: 0.55rem 1.2rem;
+    font-size: 0.76rem;
+  }
+}

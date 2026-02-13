@@ -5,6 +5,7 @@ import SectionHeading from '../components/SectionHeading'
 import { trackEvent } from '../lib/analytics'
 
 const API_BASE_URL = 'https://api.averocloud.com/api/v1'
+const CONTACT_API_URL = 'https://1c4qpl8nob.execute-api.us-east-1.amazonaws.com/contact'
 
 interface AccessRequestData {
   name: string
@@ -12,6 +13,7 @@ interface AccessRequestData {
   company: string
   role: string
   priority: string
+  _honeypot: string
 }
 
 const emptyForm: AccessRequestData = {
@@ -20,6 +22,7 @@ const emptyForm: AccessRequestData = {
   company: '',
   role: '',
   priority: '',
+  _honeypot: '',
 }
 
 export default function SignupPage() {
@@ -44,6 +47,20 @@ export default function SignupPage() {
     })
 
     try {
+      // Fire-and-forget email notification via Lambda
+      fetch(CONTACT_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'signup',
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          role: form.role || undefined,
+          _honeypot: form._honeypot || undefined,
+        }),
+      }).catch(() => {})
+
       const response = await fetch(`${API_BASE_URL}/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -103,6 +120,16 @@ export default function SignupPage() {
           <>
             <form className="auth-form" onSubmit={handleSubmit}>
               {error && <div className="auth-error">{error}</div>}
+              <input
+                type="text"
+                name="website"
+                value={form._honeypot}
+                onChange={(event) => updateField('_honeypot', event.target.value)}
+                style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0 }}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+              />
               <label>
                 Full Name
                 <input

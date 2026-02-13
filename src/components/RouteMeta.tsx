@@ -52,6 +52,11 @@ const routeMeta: Record<string, RouteMetaDefinition> = {
     title: 'Contact | Avero',
     description: 'Talk to the Avero team about your marketing setup and get started.',
   },
+  '/services': {
+    title: 'Avero Services | Platform + Agency',
+    description:
+      'Explore 15+ integrated marketing modules, creative production, contractor outsourcing, and influencer placement — all through Avero.',
+  },
 }
 
 function setMeta(name: string, content: string) {

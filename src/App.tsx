@@ -4,6 +4,7 @@ import { App as KonstaApp, Button } from 'konsta/react'
 import { BrowserRouter, Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import FeaturesPage from './pages/FeaturesPage'
+import ServicesPage from './pages/ServicesPage'
 import IntegrationsPage from './pages/IntegrationsPage'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
@@ -26,6 +27,7 @@ import { trackEvent } from './lib/analytics'
 const navItems = [
   { to: '/', label: 'Home' },
   { to: '/features', label: 'Features' },
+  { to: '/services', label: 'Services' },
   { to: '/integrations', label: 'Integrations' },
   { to: '/about', label: 'About' },
 ]
@@ -191,6 +193,7 @@ function SiteFooter() {
         </div>
         <div className="footer-links">
           <Link to="/features">Features</Link>
+          <Link to="/services">Services</Link>
           <Link to="/integrations">Integrations</Link>
           <Link to="/about">About</Link>
           <Link to="/contact">Contact</Link>
@@ -231,6 +234,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/features" element={<FeaturesPage />} />
+            <Route path="/services" element={<ServicesPage />} />
             <Route path="/integrations" element={<IntegrationsPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
