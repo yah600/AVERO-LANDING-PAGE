@@ -48,6 +48,10 @@ const routeMeta: Record<string, RouteMetaDefinition> = {
     title: 'Cookie Policy | Avero',
     description: 'Review how Avero uses cookies for platform functionality and experience quality.',
   },
+  '/contact': {
+    title: 'Contact | Avero',
+    description: 'Talk to the Avero team about your marketing setup and get started.',
+  },
 }
 
 function setMeta(name: string, content: string) {
@@ -70,6 +74,9 @@ function setMetaProperty(property: string, content: string) {
   tag.setAttribute('content', content)
 }
 
+const SITE_URL = 'https://averocloud.com'
+const OG_IMAGE = `${SITE_URL}/avero-wordmark-paper.png`
+
 export default function RouteMeta() {
   const location = useLocation()
 
@@ -79,8 +86,11 @@ export default function RouteMeta() {
     setMeta('description', meta.description)
     setMetaProperty('og:title', meta.title)
     setMetaProperty('og:description', meta.description)
+    setMetaProperty('og:url', `${SITE_URL}${location.pathname}`)
+    setMetaProperty('og:image', OG_IMAGE)
     setMeta('twitter:title', meta.title)
     setMeta('twitter:description', meta.description)
+    setMeta('twitter:image', OG_IMAGE)
   }, [location.pathname])
 
   return null

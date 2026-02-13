@@ -172,7 +172,7 @@ export default function FeaturesPage() {
           </Link>
         </div>
         <ImageAnchor
-          src="/assets/features-modules-overview.png"
+          src="/assets/features-modules-overview.webp"
           alt="Avero feature modules visual"
           className="story-image story-image-wide"
           fallbackLabel="Features Placeholder"

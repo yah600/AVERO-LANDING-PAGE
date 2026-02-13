@@ -217,7 +217,7 @@ export default function HomePage() {
           </Link>
         </div>
         <ImageAnchor
-          src="/assets/integration-control-surface.png"
+          src="/assets/integration-control-surface.webp"
           alt="Avero dashboard product mockup"
           className="story-image story-image-hero"
           fallbackLabel="Hero Product Placeholder"
@@ -292,7 +292,7 @@ export default function HomePage() {
           ))}
         </div>
         <ImageAnchor
-          src="/assets/flow-decision-system.png"
+          src="/assets/flow-decision-system.webp"
           alt="Avero workflow mockup"
           className="story-image story-image-flow"
           fallbackLabel="Workflow Placeholder"
