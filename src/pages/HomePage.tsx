@@ -2,7 +2,6 @@ import { CheckCircle2, ShieldCheck, TrendingUp, Users, Workflow } from 'lucide-r
 import { Button } from 'konsta/react'
 import { Link } from 'react-router-dom'
 import ImageAnchor from '../components/ImageAnchor'
-import VideoPlayer from '../components/VideoPlayer'
 import { trackEvent } from '../lib/analytics'
 
 const painSignals = [
@@ -69,10 +68,6 @@ const marketingSurfaces = [
   {
     title: 'Compliance Readiness',
     copy: 'Use pre-launch checks through SYN Engine to reduce avoidable regulatory risk.',
-  },
-  {
-    title: 'Contractor & Influencer Placement',
-    copy: 'Access a curated network of creative professionals and influencers through built-in contracts and management workflows.',
   },
 ]
 
@@ -221,10 +216,11 @@ export default function HomePage() {
             </Button>
           </Link>
         </div>
-        <VideoPlayer
-          src="/assets/videos/hero-reel.mp4"
-          poster="/assets/videos/hero-reel-poster.jpg"
-          className="video-player-hero"
+        <ImageAnchor
+          src="/assets/integration-control-surface.webp"
+          alt="Avero dashboard product mockup"
+          className="story-image story-image-hero"
+          fallbackLabel="Hero Product Placeholder"
           loading="eager"
         />
       </section>

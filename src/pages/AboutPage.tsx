@@ -79,9 +79,7 @@ export default function AboutPage() {
         </p>
         <p className="story-lead story-lead-narrow" data-reveal>
           It centralizes execution, visibility, and control so teams move faster with lower waste,
-          lower risk, and stronger long-term ROI. Avero also connects teams with vetted contractors
-          and influencers through built-in placement and contract management — extending your
-          team's capacity without extending your headcount.
+          lower risk, and stronger long-term ROI.
         </p>
       </section>
 

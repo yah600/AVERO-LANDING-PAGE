@@ -459,17 +459,37 @@ export default function ServicesPage() {
                 Work produced through our contractor network.
               </h2>
             </div>
-            <div className="video-grid-2">
-              <VideoPlayer
-                src="/assets/videos/services-reel-2.mp4"
-                poster="/assets/videos/services-reel-2-poster.jpg"
-                className="video-player-grid"
-              />
-              <VideoPlayer
-                src="/assets/videos/services-clip-1.mp4"
-                poster="/assets/videos/services-clip-1-poster.jpg"
-                className="video-player-grid"
-              />
+            <div className="video-scroll" data-reveal>
+              {[
+                {
+                  src: '/assets/videos/services-reel-1.mp4',
+                  poster: '/assets/videos/services-reel-1-poster.jpg',
+                },
+                {
+                  src: '/assets/videos/services-reel-2.mp4',
+                  poster: '/assets/videos/services-reel-2-poster.jpg',
+                },
+                {
+                  src: '/assets/videos/hero-reel.mp4',
+                  poster: '/assets/videos/hero-reel-poster.jpg',
+                },
+                {
+                  src: '/assets/videos/services-clip-1.mp4',
+                  poster: '/assets/videos/services-clip-1-poster.jpg',
+                },
+              ].map((video) => (
+                <div key={video.src} className="video-scroll-item">
+                  <video
+                    src={video.src}
+                    poster={video.poster}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                  />
+                </div>
+              ))}
             </div>
           </section>
 
